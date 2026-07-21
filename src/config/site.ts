@@ -14,7 +14,7 @@ export const person = {
   name: "Dilara Demirci", // [PLACEHOLDER]
   role: "UGC İçerik Üreticisi & AI Sanatçısı", // [PLACEHOLDER]
   location: "İstanbul, Türkiye", // [PLACEHOLDER]
-  email: "merhaba@dilarademirci.com", // [PLACEHOLDER]
+  email: "ugcdilara1@gmail.com",
   avatar: "/images/real/avatar.webp",
 };
 
@@ -59,9 +59,9 @@ export type SocialLink = {
 };
 
 export const socialLinks: SocialLink[] = [
-  { label: "Instagram", href: "https://instagram.com/dilarademirci", handle: "@dilarademirci" }, // [PLACEHOLDER]
-  { label: "TikTok", href: "https://tiktok.com/@dilarademirci", handle: "@dilarademirci" }, // [PLACEHOLDER]
-  { label: "E-posta", href: "mailto:merhaba@dilarademirci.com", handle: "merhaba@dilarademirci.com" }, // [PLACEHOLDER]
+  { label: "Instagram", href: "https://www.instagram.com/diloscreations/", handle: "@diloscreations" },
+  { label: "TikTok", href: "https://www.tiktok.com/@dilarai.digital", handle: "@dilarai.digital" },
+  { label: "E-posta", href: "mailto:ugcdilara1@gmail.com", handle: "ugcdilara1@gmail.com" },
 ];
 
 export const nav = [
