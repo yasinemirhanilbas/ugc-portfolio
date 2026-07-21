@@ -46,15 +46,15 @@ const ugcSlides = ugcEntries.map((entry) => ({
 
   <section class="content-section">
     <div class="container section-heading">
-      <p class="label-mono">AI İçerikleri</p>
-      <h2>AI ile ürettiğim görseller</h2>
+      <a class="label-mono section-link" href="/ai-icerikleri">AI İçerikleri</a>
+      <h2>AI ile ürettiğim içerikler</h2>
     </div>
     <AutoSlider items={aiSlides} variant="square" speed={40} />
   </section>
 
   <section class="content-section">
     <div class="container section-heading">
-      <p class="label-mono">UGC İçerikleri</p>
+      <a class="label-mono section-link" href="/ugc">UGC İçerikleri</a>
       <h2>Markalar için ürettiğim UGC videoları</h2>
     </div>
     <AutoSlider items={ugcSlides} variant="reel" speed={48} />
@@ -95,6 +95,15 @@ const ugcSlides = ugcEntries.map((entry) => ({
 
   .section-heading {
     margin-bottom: var(--space-lg);
+  }
+
+  .section-link {
+    display: inline-block;
+    transition: color var(--transition-fast);
+  }
+
+  .section-link:hover {
+    color: var(--color-accent-strong);
   }
 
   .section-heading h2 {
