@@ -1,15 +1,15 @@
 // Ham (telefon kamerasından gelen, büyük) UGC videolarını web için makul bir
 // boyuta sıkıştıran bakım scripti. Videolar git deposunda TUTULMAZ — bu script
 // sadece yerel bir "ham video → sıkıştırılmış video" dönüşümü yapar; çıktıyı
-// siz (ya da ben) manuel olarak Cloudflare R2 bucket'ına yüklersiniz, sonra
-// oradan aldığınız public URL'i içerik dosyasındaki `videoUrl` alanına
-// yazarsınız.
+// `npm run upload-video` ile Vercel Blob'a yükleyip aldığınız public URL'i
+// içerik dosyasındaki `videoUrl` alanına yazarsınız.
 //
 // Kullanım:
 //   1) Ham video dosyalarını videos-raw/ klasörüne koyun
 //   2) node scripts/optimize-videos.mjs  (veya: npm run compress-videos)
 //   3) Sıkıştırılmış dosyalar videos-compressed/ klasöründe oluşur
-//   4) Bu dosyaları R2 bucket'ına yükleyip aldığınız linki content dosyasına ekleyin
+//   4) npm run upload-video videos-compressed/dosya-adi.mp4
+//   5) Çıktıdaki public URL'i ilgili içerik dosyasının videoUrl alanına ekleyin
 //
 // Gereksinim: sistemde ffmpeg ve ffprobe kurulu olmalı.
 import { readdir, mkdir, stat } from "node:fs/promises";
@@ -114,8 +114,8 @@ async function main() {
   }
 
   console.log(`\nSıkıştırılmış videolar burada:\n${OUT_DIR}`);
-  console.log("Bu dosyaları Cloudflare R2 bucket'ınıza yükleyip aldığınız public linki");
-  console.log("ilgili içerik dosyasındaki `videoUrl` alanına ekleyin.");
+  console.log("Yüklemek için: npm run upload-video videos-compressed/<dosya-adi>.mp4");
+  console.log("Aldığınız public linki ilgili içerik dosyasındaki `videoUrl` alanına ekleyin.");
 }
 
 main().catch((err) => {
