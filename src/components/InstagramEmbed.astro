@@ -1,0 +1,47 @@
+---
+// Instagram'ın resmi embed script'i ile bir gönderiyi/reel'i doğrudan sayfada
+// oynatılabilir şekilde gösterir. Gerçek bir Instagram linki gerektirir —
+// placeholder linkler Instagram'ın kendi "içerik bulunamadı" durumunu gösterir,
+// gerçek link eklendiğinde otomatik olarak çalışmaya başlar.
+interface Props {
+  url: string;
+  caption?: string;
+  class?: string;
+}
+
+const { url, caption, class: className } = Astro.props;
+---
+
+<div class:list={["instagram-embed-wrap", className]}>
+  <blockquote
+    class="instagram-media"
+    data-instgrm-permalink={url}
+    data-instgrm-version="14"
+  >
+    <a href={url} target="_blank" rel="noopener noreferrer">
+      {caption ?? "Instagram gönderisini görüntüle"}
+    </a>
+  </blockquote>
+</div>
+
+<script async src="//www.instagram.com/embed.js" is:inline></script>
+
+<style>
+  .instagram-embed-wrap {
+    width: 100%;
+    max-width: 26rem;
+    margin-inline: auto;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .instagram-embed-wrap :global(iframe) {
+    border-radius: var(--radius-lg) !important;
+  }
+
+  @media (min-width: 860px) {
+    .instagram-embed-wrap {
+      margin-inline: 0;
+    }
+  }
+</style>

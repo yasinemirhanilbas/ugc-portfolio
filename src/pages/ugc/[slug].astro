@@ -1,7 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import FramedMedia from "../../components/FramedMedia.astro";
+import InstagramEmbed from "../../components/InstagramEmbed.astro";
 import { person, seo } from "../../config/site";
 
 export async function getStaticPaths() {
@@ -17,7 +17,7 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { title, brand, description, instagramUrl, thumbnail } = entry.data;
+const { title, brand, description, instagramUrl } = entry.data;
 ---
 
 <BaseLayout title={`${title} — ${person.name}`} description={seo.description}>
@@ -25,7 +25,7 @@ const { title, brand, description, instagramUrl, thumbnail } = entry.data;
     <a class="back-link label-mono" href="/ugc">← Tüm UGC İçerikleri</a>
 
     <div class="detail-layout">
-      <FramedMedia class="detail-media" variant="reel" src={thumbnail} alt={title} loading="eager" />
+      <InstagramEmbed class="detail-media" url={instagramUrl} caption={title} />
 
       <div class="detail-copy">
         <p class="label-mono">{brand}</p>
