@@ -1,0 +1,64 @@
+/*
+  Tasarım token'ları — bu dosya template'in görsel kimliğini tanımlar.
+  Yeni bir içerik üreticisi için özelleştirme yapılırken sadece bu dosyadaki
+  değerler değiştirilmeli; component kodlarına dokunulmamalı.
+*/
+:root {
+  /* Renkler — koyu çam yeşili zemin + sıcak altın kontrast */
+  --color-bg: #0f1f17;
+  --color-surface-1: #16281e;
+  --color-surface-2: #1c3227;
+
+  --color-accent: #8fbc94;
+  --color-accent-strong: #b7d9ba;
+  --color-accent-warm: #d4b483;
+
+  --color-text: #f2f0e9;
+  --color-text-muted: #9caa9f;
+
+  --color-border: rgba(242, 240, 233, 0.1);
+  --color-overlay: rgba(15, 31, 23, 0.72);
+
+  /* Tipografi */
+  --font-display: "Fraunces Variable", Georgia, serif;
+  --font-body: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, monospace;
+
+  --fs-2xs: 0.75rem;
+  --fs-xs: 0.875rem;
+  --fs-sm: 1rem;
+  --fs-md: 1.25rem;
+  --fs-lg: 1.75rem;
+  --fs-xl: 2.5rem;
+  --fs-2xl: 3.5rem;
+  --fs-3xl: 4.75rem;
+
+  /* Aralık ölçeği */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+  --space-2xl: 6rem;
+  --space-3xl: 9rem;
+
+  /* Şekil / gölge */
+  --radius-sm: 0.75rem;
+  --radius-md: 1.25rem;
+  --radius-lg: 2rem;
+  --shadow-soft: 0 20px 60px -30px rgba(0, 0, 0, 0.6);
+
+  /* Layout */
+  --container-max: 78rem;
+  --transition-fast: 160ms ease;
+  --transition-medium: 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0ms;
+    --transition-medium: 0ms;
+  }
+}

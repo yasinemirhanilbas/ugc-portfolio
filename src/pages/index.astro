@@ -1,0 +1,117 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FramedMedia from "../components/FramedMedia.astro";
+import AutoSlider from "../components/AutoSlider.astro";
+import { hero, person } from "../config/site";
+import { renderEmphasis } from "../lib/text";
+
+const ugcEntries = await getCollection("ugc");
+const aiEntries = await getCollection("ai-content");
+
+const aiSlides = aiEntries.flatMap((entry) =>
+  entry.data.images.slice(0, 2).map((src, index) => ({
+    src,
+    alt: `${entry.data.title} #${index + 1}`,
+    href: `/ai-icerikleri/${entry.id}`,
+    caption: entry.data.title,
+  }))
+);
+
+const ugcSlides = ugcEntries.map((entry) => ({
+  src: entry.data.thumbnail,
+  alt: entry.data.title,
+  href: `/ugc/${entry.id}`,
+  caption: entry.data.brand,
+}));
+---
+
+<BaseLayout>
+  <section class="hero container">
+    <div class="hero-copy">
+      <p class="label-mono">{hero.eyebrow}</p>
+      <h1 set:html={renderEmphasis(hero.title)} />
+      <p class="hero-bio">{hero.shortBio}</p>
+      <a class="btn btn-primary" href={hero.ctaHref}>{hero.ctaLabel}</a>
+    </div>
+
+    <FramedMedia
+      class="hero-media"
+      src={person.avatar}
+      alt={person.name}
+      variant="square"
+      loading="eager"
+    />
+  </section>
+
+  <section class="content-section">
+    <div class="container section-heading">
+      <p class="label-mono">AI İçerikleri</p>
+      <h2>AI ile ürettiğim görseller</h2>
+    </div>
+    <AutoSlider items={aiSlides} variant="square" speed={40} />
+  </section>
+
+  <section class="content-section">
+    <div class="container section-heading">
+      <p class="label-mono">UGC İçerikleri</p>
+      <h2>Markalar için ürettiğim UGC videoları</h2>
+    </div>
+    <AutoSlider items={ugcSlides} variant="reel" speed={48} />
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    align-items: center;
+    padding-block: var(--space-2xl) var(--space-xl);
+  }
+
+  .hero-copy h1 {
+    font-size: var(--fs-2xl);
+    margin-block: var(--space-sm);
+  }
+
+  .hero-bio {
+    max-width: 32rem;
+    font-size: var(--fs-md);
+  }
+
+  :global(.hero-media) {
+    justify-self: center;
+    width: min(100%, 20rem);
+  }
+
+  .content-section {
+    padding-block: var(--space-lg) var(--space-xl);
+  }
+
+  .content-section:last-child {
+    padding-bottom: var(--space-2xl);
+  }
+
+  .section-heading {
+    margin-bottom: var(--space-lg);
+  }
+
+  .section-heading h2 {
+    font-size: var(--fs-xl);
+  }
+
+  @media (min-width: 860px) {
+    .hero {
+      grid-template-columns: 1.2fr 0.8fr;
+    }
+
+    .hero-copy h1 {
+      font-size: var(--fs-3xl);
+    }
+
+    :global(.hero-media) {
+      justify-self: end;
+    }
+  }
+</style>

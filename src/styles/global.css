@@ -1,0 +1,189 @@
+@import "@fontsource-variable/fraunces/wght.css";
+@import "@fontsource-variable/fraunces/wght-italic.css";
+@import "@fontsource/manrope/400.css";
+@import "@fontsource/manrope/500.css";
+@import "@fontsource/manrope/600.css";
+@import "@fontsource/space-mono/400.css";
+@import "@fontsource/space-mono/700.css";
+@import "./tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.1;
+  margin: 0 0 var(--space-sm);
+}
+
+em,
+.accent-italic {
+  font-style: italic;
+  color: var(--color-accent-warm);
+}
+
+p {
+  margin: 0 0 var(--space-sm);
+  color: var(--color-text-muted);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  font-family: inherit;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-md);
+}
+
+.label-mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.btn-primary {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-accent-strong);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.btn-outline:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* Klavye erişilebilirliği: görünür odak stili */
+:focus-visible {
+  outline: 2px solid var(--color-accent-warm);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/*
+  Bento grid — sütun akışlı (masonry) düzen. Her öğe kendi en-boy oranına
+  göre doğal yüksekliğini alır ve sütunlar boyunca sırayla akar; bu yüzden
+  içerik sayısı değiştiğinde CSS Grid'in "dense" paketlemesinde olduğu gibi
+  kalıcı boşluklar oluşmaz. "large" olarak işaretlenen öğeler öne çıkan/vurgu
+  hücreleri olarak tüm sütunları kaplar.
+*/
+.bento-grid {
+  column-count: 1;
+  column-gap: var(--space-md);
+}
+
+.bento-grid > * {
+  break-inside: avoid;
+  width: 100%;
+  margin-bottom: var(--space-md);
+}
+
+/* Reel (9:16) formatlı "large" öğeler tüm sütunlara yayılmaz — aksi halde
+   orantısız derecede uzun görünür. Tam genişlik vurgusu sadece kare/geniş
+   formatlı içerik için uygulanır. */
+.bento-grid > .bento-large:not([data-variant="reel"]) {
+  column-span: all;
+}
+
+@media (min-width: 640px) {
+  .bento-grid {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 1000px) {
+  .bento-grid {
+    column-count: 3;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -1,0 +1,124 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FramedMedia from "../components/FramedMedia.astro";
+import { person, seo } from "../config/site";
+
+const collabs = (await getCollection("collabs")).sort((a, b) => b.data.year - a.data.year);
+---
+
+<BaseLayout title={`İş Birlikleri — ${person.name}`} description={seo.description}>
+  <section class="container page-header">
+    <h1>İş <em>Birlikleri</em></h1>
+    <p class="page-intro">
+      Birlikte çalıştığım markalar ve her iş birliğinden kısa bir vaka özeti.
+      Detaylı vaka çalışması sayfasına gitmek için bir markaya tıklayın.
+    </p>
+  </section>
+
+  <section class="container collabs-list">
+    {
+      collabs.map((collab) => (
+        <a class="collab-card" href={`/is-birlikleri/${collab.id}`}>
+          <FramedMedia class="collab-logo" variant="wide" src={collab.data.logo} alt={`${collab.data.brand} logosu`} />
+          <div class="collab-card-body">
+            <div class="collab-card-heading">
+              <span class="collab-brand">{collab.data.brand}</span>
+              <span class="collab-year label-mono">{collab.data.year}</span>
+            </div>
+            <p class="collab-summary">{collab.data.summary}</p>
+          </div>
+          <span class="collab-arrow" aria-hidden="true">→</span>
+        </a>
+      ))
+    }
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: var(--space-2xl) var(--space-lg);
+  }
+
+  .page-header h1 {
+    font-size: var(--fs-2xl);
+  }
+
+  .page-intro {
+    max-width: 40rem;
+    font-size: var(--fs-md);
+  }
+
+  .collabs-list {
+    display: grid;
+    gap: var(--space-sm);
+    padding-block: var(--space-md) var(--space-2xl);
+  }
+
+  .collab-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface-1);
+    transition: border-color var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .collab-card:hover {
+    border-color: var(--color-accent-warm);
+    transform: translateY(-2px);
+  }
+
+  :global(.collab-logo) {
+    width: 6rem;
+    flex-shrink: 0;
+  }
+
+  .collab-card-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .collab-card-heading {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+  }
+
+  .collab-brand {
+    font-family: var(--font-display);
+    font-size: var(--fs-md);
+  }
+
+  .collab-year {
+    color: var(--color-text-muted);
+  }
+
+  .collab-summary {
+    margin: 0.2rem 0 0;
+    font-size: var(--fs-xs);
+  }
+
+  .collab-arrow {
+    font-family: var(--font-mono);
+    font-size: var(--fs-lg);
+    color: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 640px) {
+    .collab-card {
+      flex-wrap: wrap;
+    }
+
+    :global(.collab-logo) {
+      width: 4.5rem;
+    }
+
+    .collab-arrow {
+      display: none;
+    }
+  }
+</style>

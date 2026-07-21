@@ -1,0 +1,176 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FramedMedia from "../../components/FramedMedia.astro";
+import { person, seo } from "../../config/site";
+
+export async function getStaticPaths() {
+  const collabs = await getCollection("collabs");
+  return collabs.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"collabs">;
+}
+
+const { entry } = Astro.props;
+const { brand, year, logo, summary, gallery, instagramPosts } = entry.data;
+---
+
+<BaseLayout title={`${brand} — ${person.name}`} description={seo.description}>
+  <section class="container detail-header">
+    <a class="back-link label-mono" href="/is-birlikleri">← Tüm İş Birlikleri</a>
+
+    <div class="detail-heading">
+      <FramedMedia class="detail-logo" variant="wide" src={logo} alt={`${brand} logosu`} />
+      <div>
+        <p class="label-mono">{year}</p>
+        <h1>{brand}</h1>
+        <p class="detail-summary">{summary}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="container gallery-block">
+    <h2>Görsel Galeri</h2>
+    <p class="section-note">Büyütmek için bir görsele tıklayın. (Yer tutucu görseller — gerçek vaka görselleriyle değiştirilecek.)</p>
+    <div class="bento-grid">
+      {
+        gallery.map((src) => (
+          <FramedMedia class="bento-small" variant="square" src={src} alt={`${brand} vaka görseli`} lightbox />
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="container posts-block">
+    <h2>Instagram Postları</h2>
+    <p class="section-note">Yer tutucu linkler — gerçek Instagram gönderi bağlantılarıyla değiştirilecek.</p>
+    <ul class="posts-list">
+      {
+        instagramPosts.map((url, index) => (
+          <li>
+            <a href={url} target="_blank" rel="noopener noreferrer" class="post-card">
+              <span class="post-icon" aria-hidden="true">▶</span>
+              <span>
+                <span class="post-title">Instagram Postu #{index + 1}</span>
+                <span class="post-url">{url}</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .detail-header {
+    padding-block: var(--space-2xl) var(--space-lg);
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+    transition: color var(--transition-fast);
+  }
+
+  .back-link:hover {
+    color: var(--color-accent);
+  }
+
+  .detail-heading {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+    align-items: start;
+  }
+
+  :global(.detail-logo) {
+    width: min(100%, 16rem);
+  }
+
+  .detail-heading h1 {
+    font-size: var(--fs-2xl);
+  }
+
+  .detail-summary {
+    font-size: var(--fs-md);
+    color: var(--color-text);
+    max-width: 40rem;
+  }
+
+  .gallery-block,
+  .posts-block {
+    padding-block: var(--space-lg);
+  }
+
+  .gallery-block h2,
+  .posts-block h2 {
+    font-size: var(--fs-lg);
+  }
+
+  .section-note {
+    font-size: var(--fs-xs);
+    color: var(--color-text-muted);
+    max-width: 36rem;
+  }
+
+  .posts-list {
+    display: grid;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+  }
+
+  .post-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface-1);
+    transition: border-color var(--transition-fast);
+  }
+
+  .post-card:hover {
+    border-color: var(--color-accent);
+  }
+
+  .post-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    flex-shrink: 0;
+    border-radius: 999px;
+    background-color: var(--color-surface-2);
+    color: var(--color-accent);
+    font-size: 0.7rem;
+  }
+
+  .post-title {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--color-text);
+  }
+
+  .post-url {
+    display: block;
+    font-size: var(--fs-2xs);
+    color: var(--color-text-muted);
+    word-break: break-all;
+  }
+
+  @media (min-width: 700px) {
+    .detail-heading {
+      grid-template-columns: 16rem 1fr;
+    }
+  }
+</style>

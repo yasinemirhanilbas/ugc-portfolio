@@ -1,0 +1,91 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FramedMedia from "../../components/FramedMedia.astro";
+import { person, seo } from "../../config/site";
+
+export async function getStaticPaths() {
+  const ugcEntries = await getCollection("ugc");
+  return ugcEntries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"ugc">;
+}
+
+const { entry } = Astro.props;
+const { title, brand, description, instagramUrl, thumbnail } = entry.data;
+---
+
+<BaseLayout title={`${title} — ${person.name}`} description={seo.description}>
+  <section class="container detail">
+    <a class="back-link label-mono" href="/ugc">← Tüm UGC İçerikleri</a>
+
+    <div class="detail-layout">
+      <FramedMedia class="detail-media" variant="reel" src={thumbnail} alt={title} loading="eager" />
+
+      <div class="detail-copy">
+        <p class="label-mono">{brand}</p>
+        <h1>{title}</h1>
+        <p class="detail-description">{description}</p>
+        <a class="btn btn-primary" href={instagramUrl} target="_blank" rel="noopener noreferrer">
+          Instagram'da Görüntüle
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .detail {
+    padding-block: var(--space-2xl) var(--space-2xl);
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+    transition: color var(--transition-fast);
+  }
+
+  .back-link:hover {
+    color: var(--color-accent);
+  }
+
+  .detail-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  :global(.detail-media) {
+    width: min(100%, 22rem);
+    margin-inline: auto;
+  }
+
+  .detail-copy h1 {
+    font-size: var(--fs-2xl);
+    margin-top: var(--space-2xs);
+  }
+
+  .detail-description {
+    font-size: var(--fs-md);
+    color: var(--color-text);
+    max-width: 32rem;
+    margin-bottom: var(--space-lg);
+  }
+
+  @media (min-width: 860px) {
+    .detail-layout {
+      grid-template-columns: 22rem 1fr;
+    }
+
+    :global(.detail-media) {
+      margin-inline: 0;
+    }
+  }
+</style>

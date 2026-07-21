@@ -1,0 +1,139 @@
+---
+// Sayfa üstünde tüm içerikleri sürekli kayan bir şerit halinde gösteren
+// öne çıkarma komponenti. Hover'da durur; prefers-reduced-motion'da elle
+// kaydırılabilir statik bir şeride döner.
+import FramedMedia from "./FramedMedia.astro";
+
+interface SlideItem {
+  src: string;
+  alt: string;
+  href?: string;
+  target?: "_blank" | "_self";
+  caption?: string;
+  variant?: "reel" | "square" | "wide";
+}
+
+interface Props {
+  items: SlideItem[];
+  variant?: "reel" | "square" | "wide";
+  speed?: number;
+  lightbox?: boolean;
+}
+
+const { items, variant = "square", speed = 42, lightbox = false } = Astro.props;
+const track = [...items, ...items];
+---
+
+<div class="auto-slider">
+  <div class="auto-slider-track" style={`--slider-speed: ${speed}s`}>
+    {
+      track.map((item, index) => {
+        const isDuplicate = index >= items.length;
+        const itemVariant = item.variant ?? variant;
+        return (
+          <div
+            class="auto-slider-item"
+            data-variant={itemVariant}
+            aria-hidden={isDuplicate ? "true" : undefined}
+          >
+            <FramedMedia
+              variant={itemVariant}
+              src={item.src}
+              alt={item.alt}
+              href={item.href}
+              target={item.target}
+              lightbox={!item.href && lightbox}
+              loading={isDuplicate ? "lazy" : "eager"}
+              tabindex={isDuplicate ? -1 : undefined}
+            >
+              {item.caption && <span class="chip label-mono">{item.caption}</span>}
+            </FramedMedia>
+          </div>
+        );
+      })
+    }
+  </div>
+</div>
+
+<style>
+  .auto-slider {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 5%,
+      black 95%,
+      transparent
+    );
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  }
+
+  .auto-slider-track {
+    display: flex;
+    gap: var(--space-md);
+    width: max-content;
+    animation: auto-slide var(--slider-speed) linear infinite;
+  }
+
+  .auto-slider:hover .auto-slider-track,
+  .auto-slider:focus-within .auto-slider-track {
+    animation-play-state: paused;
+  }
+
+  .auto-slider-item {
+    flex: 0 0 auto;
+  }
+
+  .auto-slider-item[data-variant="reel"] {
+    width: 9.5rem;
+  }
+
+  .auto-slider-item[data-variant="square"] {
+    width: 12rem;
+  }
+
+  .auto-slider-item[data-variant="wide"] {
+    width: 15rem;
+  }
+
+  .chip {
+    display: inline-block;
+    background-color: var(--color-overlay);
+    color: var(--color-accent-strong);
+    padding: 0.25rem 0.5rem;
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+    font-size: var(--fs-2xs);
+  }
+
+  @keyframes auto-slide {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-50% - var(--space-md) / 2));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .auto-slider-track {
+      animation: none;
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      padding-bottom: var(--space-2xs);
+    }
+
+    .auto-slider {
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    .auto-slider-item {
+      scroll-snap-align: start;
+    }
+
+    .auto-slider-item[aria-hidden="true"] {
+      display: none;
+    }
+  }
+</style>

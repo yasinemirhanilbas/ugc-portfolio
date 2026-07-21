@@ -1,0 +1,85 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FramedMedia from "../components/FramedMedia.astro";
+import { person, about, seo } from "../config/site";
+---
+
+<BaseLayout title={`Hakkımda — ${person.name}`} description={seo.description}>
+  <section class="container about-section">
+    <FramedMedia
+      class="avatar"
+      variant="square"
+      src={person.avatar}
+      alt={`${person.name} portresi`}
+      loading="eager"
+    />
+
+    <div class="about-copy">
+      <p class="label-mono">Hakkımda</p>
+      <h1>{person.name}</h1>
+      <p class="role">{person.role} · {person.location}</p>
+      <p class="short-bio">{about.shortBio}</p>
+
+      {about.longBio.map((paragraph) => <p>{paragraph}</p>)}
+
+      <h2>Yetenekler</h2>
+      <ul class="skills">
+        {about.skills.map((skill) => <li>{skill}</li>)}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    padding-block: var(--space-2xl);
+  }
+
+  :global(.avatar) {
+    width: min(100%, 18rem);
+    justify-self: center;
+  }
+
+  .role {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--color-accent);
+  }
+
+  .short-bio {
+    font-size: var(--fs-md);
+    color: var(--color-text);
+  }
+
+  .skills {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    gap: var(--space-xs);
+    margin-top: var(--space-sm);
+  }
+
+  .skills li {
+    padding: var(--space-xs) var(--space-sm);
+    background-color: var(--color-surface-1);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-xs);
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 860px) {
+    .about-section {
+      grid-template-columns: 20rem 1fr;
+      align-items: start;
+    }
+
+    :global(.avatar) {
+      justify-self: start;
+      position: sticky;
+      top: 6rem;
+    }
+  }
+</style>

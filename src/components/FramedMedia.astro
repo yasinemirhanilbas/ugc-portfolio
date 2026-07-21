@@ -1,0 +1,143 @@
+---
+// İmza görsel öge: yuvarlak köşeli, grain dokulu, hover'da zoom yapan çerçeve.
+// Bento grid'ler ve galeriler boyunca tekrarlanarak siteye görsel kimlik kazandırır.
+interface Props {
+  src: string;
+  alt: string;
+  variant?: "reel" | "square" | "wide";
+  href?: string;
+  target?: "_blank" | "_self";
+  class?: string;
+  loading?: "lazy" | "eager";
+  lightbox?: boolean;
+  tabindex?: number;
+}
+
+const {
+  src,
+  alt,
+  variant = "square",
+  href,
+  target,
+  class: className,
+  loading = "lazy",
+  lightbox = false,
+  tabindex,
+} = Astro.props;
+
+const Tag = href ? "a" : "div";
+
+const linkAttrs = href
+  ? {
+      href,
+      "aria-label": alt,
+      target,
+      rel: target === "_blank" ? "noopener noreferrer" : undefined,
+      tabindex,
+    }
+  : {};
+
+const lightboxAttrs =
+  !href && lightbox
+    ? {
+        "data-lightbox-src": src,
+        "data-lightbox-alt": alt,
+        role: "button" as const,
+        tabindex: tabindex ?? 0,
+      }
+    : {};
+---
+
+<Tag
+  class:list={["framed-media", className]}
+  data-variant={variant}
+  {...linkAttrs}
+  {...lightboxAttrs}
+>
+  <img src={src} alt={alt} loading={loading} decoding="async" />
+  <span class="grain" aria-hidden="true"></span>
+  <span class="ring" aria-hidden="true"></span>
+  <div class="overlay-content">
+    <slot />
+  </div>
+</Tag>
+
+<style>
+  .framed-media {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface-2);
+    box-shadow: var(--shadow-soft);
+    isolation: isolate;
+  }
+
+  .framed-media[data-variant="reel"] {
+    aspect-ratio: 9 / 16;
+  }
+
+  .framed-media[data-variant="square"] {
+    aspect-ratio: 1 / 1;
+  }
+
+  .framed-media[data-variant="wide"] {
+    aspect-ratio: 16 / 10;
+  }
+
+  .framed-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-medium);
+  }
+
+  .framed-media:hover img,
+  .framed-media:focus-visible img {
+    transform: scale(1.06);
+  }
+
+  .framed-media[role="button"] {
+    cursor: zoom-in;
+  }
+
+  /* Grain/noise doku overlay */
+  .grain {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.18;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* İç kenarlık — çerçeve hissi */
+  .ring {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    border-radius: inherit;
+    border: 1px solid var(--color-border);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+  }
+
+  .overlay-content {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 3;
+    padding: var(--space-sm);
+  }
+
+  .overlay-content:empty {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .framed-media:hover img,
+    .framed-media:focus-visible img {
+      transform: none;
+    }
+  }
+</style>

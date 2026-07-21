@@ -1,0 +1,92 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FramedMedia from "../../components/FramedMedia.astro";
+import { person, seo } from "../../config/site";
+
+export async function getStaticPaths() {
+  const aiEntries = await getCollection("ai-content");
+  return aiEntries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"ai-content">;
+}
+
+const { entry } = Astro.props;
+const { title, promptSummary, images } = entry.data;
+---
+
+<BaseLayout title={`${title} — ${person.name}`} description={seo.description}>
+  <section class="container detail-header">
+    <a class="back-link label-mono" href="/ai-icerikleri">← Tüm AI İçerikleri</a>
+
+    <p class="label-mono">AI Kategori</p>
+    <h1>{title}</h1>
+    <p class="detail-label label-mono">Prompt Özeti</p>
+    <p class="detail-description">{promptSummary}</p>
+  </section>
+
+  <section class="container gallery-block">
+    <p class="section-note">Büyütmek için bir görsele tıklayın.</p>
+    <div class="bento-grid">
+      {
+        images.map((src, index) => (
+          <FramedMedia
+            class="bento-medium"
+            variant="square"
+            src={src}
+            alt={`${title} #${index + 1}`}
+            lightbox
+          />
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .detail-header {
+    padding-block: var(--space-2xl) var(--space-lg);
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+    transition: color var(--transition-fast);
+  }
+
+  .back-link:hover {
+    color: var(--color-accent);
+  }
+
+  .detail-header h1 {
+    font-size: var(--fs-2xl);
+    margin-top: var(--space-2xs);
+  }
+
+  .detail-label {
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-2xs);
+  }
+
+  .detail-description {
+    font-size: var(--fs-md);
+    color: var(--color-text);
+    max-width: 36rem;
+  }
+
+  .gallery-block {
+    padding-block: var(--space-md) var(--space-2xl);
+  }
+
+  .section-note {
+    font-size: var(--fs-xs);
+    color: var(--color-text-muted);
+    max-width: 36rem;
+  }
+</style>

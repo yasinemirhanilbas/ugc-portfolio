@@ -1,0 +1,80 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FramedMedia from "../components/FramedMedia.astro";
+import AutoSlider from "../components/AutoSlider.astro";
+import { person, seo } from "../config/site";
+
+const ugcEntries = await getCollection("ugc");
+const sliderItems = ugcEntries.map((entry) => ({
+  src: entry.data.thumbnail,
+  alt: entry.data.title,
+  href: `/ugc/${entry.id}`,
+  caption: entry.data.brand,
+}));
+---
+
+<BaseLayout title={`UGC İçerikleri — ${person.name}`} description={seo.description}>
+  <section class="container page-header">
+    <h1>UGC <em>İçerikleri</em></h1>
+    <p class="page-intro">
+      Markalar için ürettiğim kullanıcı üretimi içerik (UGC) formatındaki video
+      çalışmalarından bir seçki. Detayları ve Instagram bağlantısını görmek için
+      bir karta tıklayın.
+    </p>
+  </section>
+
+  <section class="slider-section">
+    <AutoSlider items={sliderItems} variant="reel" speed={48} />
+  </section>
+
+  <section class="container gallery-section">
+    <div class="bento-grid">
+      {
+        ugcEntries.map((entry) => (
+          <FramedMedia
+            class={`bento-${entry.data.size}`}
+            variant="reel"
+            src={entry.data.thumbnail}
+            alt={entry.data.title}
+            href={`/ugc/${entry.id}`}
+          >
+            <span class="chip label-mono">{entry.data.brand}</span>
+          </FramedMedia>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: var(--space-2xl) var(--space-lg);
+  }
+
+  .page-header h1 {
+    font-size: var(--fs-2xl);
+  }
+
+  .page-intro {
+    max-width: 40rem;
+    font-size: var(--fs-md);
+  }
+
+  .slider-section {
+    padding-block: var(--space-sm) var(--space-lg);
+  }
+
+  .gallery-section {
+    padding-block: var(--space-md) var(--space-2xl);
+  }
+
+  .chip {
+    display: inline-block;
+    background-color: var(--color-overlay);
+    color: var(--color-accent-strong);
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+  }
+</style>

@@ -1,0 +1,133 @@
+---
+// Sayfada tek sefer render edilir. `[data-lightbox-src]` özniteliğine sahip
+// herhangi bir öğeye tıklandığında (veya Enter/Space ile), görseli tam ekran
+// bir overlay'de büyütür. FramedMedia'nın `lightbox` prop'u bu özniteliği ekler.
+---
+
+<div id="lightbox" class="lightbox" hidden aria-hidden="true" aria-modal="true" role="dialog" aria-label="Görsel önizleme">
+  <button type="button" class="lightbox-close" aria-label="Kapat">×</button>
+  <img id="lightbox-img" src="" alt="" />
+</div>
+
+<script>
+  const overlay = document.getElementById("lightbox");
+  const img = document.getElementById("lightbox-img") as HTMLImageElement | null;
+  const closeBtn = overlay?.querySelector(".lightbox-close");
+  let lastFocused: HTMLElement | null = null;
+
+  function openLightbox(src: string, alt: string) {
+    if (!overlay || !img) return;
+    img.src = src;
+    img.alt = alt;
+    overlay.hidden = false;
+    overlay.setAttribute("aria-hidden", "false");
+    lastFocused = document.activeElement as HTMLElement;
+    (closeBtn as HTMLElement | null)?.focus();
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeLightbox() {
+    if (!overlay || !img) return;
+    overlay.hidden = true;
+    overlay.setAttribute("aria-hidden", "true");
+    img.src = "";
+    document.body.style.overflow = "";
+    lastFocused?.focus();
+  }
+
+  document.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+    const trigger = target.closest("[data-lightbox-src]");
+    if (trigger) {
+      event.preventDefault();
+      const src = trigger.getAttribute("data-lightbox-src") ?? "";
+      const alt = trigger.getAttribute("data-lightbox-alt") ?? "";
+      openLightbox(src, alt);
+      return;
+    }
+    if (target === overlay || target === closeBtn) {
+      closeLightbox();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && overlay && !overlay.hidden) {
+      closeLightbox();
+      return;
+    }
+    if (event.key === "Enter" || event.key === " ") {
+      const active = document.activeElement as HTMLElement | null;
+      if (active?.hasAttribute("data-lightbox-src")) {
+        event.preventDefault();
+        const src = active.getAttribute("data-lightbox-src") ?? "";
+        const alt = active.getAttribute("data-lightbox-alt") ?? "";
+        openLightbox(src, alt);
+      }
+    }
+  });
+</script>
+
+<style>
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(15, 31, 23, 0.92);
+    padding: var(--space-lg);
+    cursor: zoom-out;
+  }
+
+  .lightbox[hidden] {
+    display: none;
+  }
+
+  .lightbox img {
+    max-width: min(90vw, 60rem);
+    max-height: 85vh;
+    width: auto;
+    height: auto;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+    cursor: default;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface-1);
+    color: var(--color-text);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .lightbox-close:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .lightbox img {
+      animation: lightbox-in 220ms ease;
+    }
+  }
+
+  @keyframes lightbox-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+</style>
