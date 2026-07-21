@@ -17,6 +17,9 @@ const ugcCollection = defineCollection({
     description: z.string(),
     instagramUrl: z.string().url(),
     thumbnail: z.string(),
+    // Kendi barındırdığımız (R2 vb.) video dosyasının linki — doluysa detay
+    // sayfasında Instagram embed'i yerine native video player kullanılır.
+    videoUrl: z.string().url().optional(),
     size: gridSize,
   }),
 });

@@ -25,3 +25,7 @@ pnpm-debug.log*
 
 # görsel optimizasyon script'inin yerel takip dosyası
 .image-optimize-manifest.json
+
+# videolar git deposunda tutulmaz — R2'ye yüklenmeden önceki yerel aşama
+videos-raw/
+videos-compressed/

@@ -10,7 +10,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "optimize-images": "node scripts/optimize-images.mjs"
+    "optimize-images": "node scripts/optimize-images.mjs",
+    "compress-videos": "node scripts/optimize-videos.mjs"
   },
   "dependencies": {
     "@fontsource-variable/fraunces": "^5.2.9",
