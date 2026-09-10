@@ -23,9 +23,11 @@ function isActive(href: string) {
       aria-controls="primary-nav"
     >
       <span class="visually-hidden">Menüyü aç/kapat</span>
-      <span class="nav-toggle-bar"></span>
-      <span class="nav-toggle-bar"></span>
-      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bars">
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </span>
     </button>
 
     <nav id="primary-nav" class="primary-nav">
@@ -97,23 +99,67 @@ function isActive(href: string) {
 
   .nav-toggle {
     display: none;
-    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    gap: 6px;
     width: 2.5rem;
     height: 2.5rem;
     background: transparent;
-    border: 1px solid var(--color-accent);
-    border-radius: var(--radius-sm);
+    border: none;
+    border-radius: 999px;
     cursor: pointer;
+    transition: background-color var(--transition-fast);
+  }
+
+  .nav-toggle:hover,
+  .nav-toggle:focus-visible {
+    background-color: var(--color-surface-2);
+  }
+
+  .nav-toggle-bars {
+    position: relative;
+    width: 20px;
+    height: 14px;
   }
 
   .nav-toggle-bar {
-    display: block;
-    height: 2.5px;
-    margin-inline: 7px;
-    background-color: var(--color-accent-strong);
+    position: absolute;
+    left: 0;
+    width: 20px;
+    height: 2px;
+    background-color: var(--color-text);
     border-radius: 2px;
+    transition: transform var(--transition-fast), opacity var(--transition-fast), top var(--transition-fast),
+      background-color var(--transition-fast);
+  }
+
+  .nav-toggle-bar:nth-child(1) {
+    top: 0;
+  }
+
+  .nav-toggle-bar:nth-child(2) {
+    top: 6px;
+  }
+
+  .nav-toggle-bar:nth-child(3) {
+    top: 12px;
+  }
+
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar {
+    background-color: var(--color-accent-warm);
+  }
+
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) {
+    top: 6px;
+    transform: rotate(45deg);
+  }
+
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) {
+    top: 6px;
+    transform: rotate(-45deg);
   }
 
   .primary-nav ul {
