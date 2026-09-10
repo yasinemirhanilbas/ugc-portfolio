@@ -12,9 +12,8 @@ doğrudan siteye işlenecek.
 Site şu an koyu çam yeşili zemin + sıcak altın/bej vurgu rengiyle
 tasarlandı (bkz. ekran görüntüleri). Bu palet bilinçli bir tercih olarak
 seçildi, ama isterseniz değiştirebiliriz:
-
-- Mevcut renk paletini olduğu gibi kullanmak ister misiniz?
-- Yoksa kendi marka renkleriniz varsa (hex kod olarak, örn. `#0F1F17`)
+ 
+- Kendi marka renkleriniz varsa (hex kod olarak, örn. `#0F1F17`)
   ana zemin rengi ve vurgu rengini paylaşır mısınız?
 
 ## 2) Kişisel Bilgiler
